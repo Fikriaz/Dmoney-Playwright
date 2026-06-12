@@ -14,7 +14,7 @@ function getAuth() {
   return client;
 }
 
-// 🔥 decode base64url (INI PENTING)
+// base64url 
 function decodeBase64Url(data) {
   if (!data) return "";
 
