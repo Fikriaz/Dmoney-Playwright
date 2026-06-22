@@ -1,13 +1,18 @@
 import { test, expect } from "@playwright/test";
 const { getOtp } = require("../../gmail");
+import { LoginPage } from "../../pages/LoginPage";
+import { otp } from "../../pages/otp";
+
 
 test("should show error when OTP is invalid", async ({ page }) => {
 
-  await page.goto("https://dmoneyportal.roadtocareer.net/login");
+  const loginpage = new LoginPage(page);
+  const codeotp = new otp(page);
   await expect(page.getByText('Welcome Back')).toBeVisible();
 
-  await page.getByRole("textbox").first().fill("freetestemail77@gmail.com");
-  await page.getByRole("textbox").nth(1).fill("testmail123");
+  await loginpage.goto();
+  await loginpage.login('freetestemail77@gmail.com','testmail123');
+
 
   await page.getByRole('button', {
     name: 'Login →'
@@ -15,7 +20,7 @@ test("should show error when OTP is invalid", async ({ page }) => {
 
   await expect(page.getByText('Verify Your Identity')).toBeVisible();
 
-  await page.getByRole("textbox").first().fill("4235");
+  await codeotp.otp('5234');
 
   await page.getByRole('button', {
     name: 'Verify OTP →'
@@ -30,11 +35,12 @@ test("should show error when OTP is invalid", async ({ page }) => {
 
 test("should show error when OTP format is invalid", async ({ page }) => {
 
-  await page.goto("https://dmoneyportal.roadtocareer.net/login");
+  const codeotp = new otp(page);
   await expect(page.getByText('Welcome Back')).toBeVisible();
 
-  await page.getByRole("textbox").first().fill("freetestemail77@gmail.com");
-  await page.getByRole("textbox").nth(1).fill("testmail123");
+  await loginpage.goto();
+  await loginpage.login('freetestemail77@gmail.com','testmail123');
+
 
   await page.getByRole('button', {
     name: 'Login →'
@@ -42,7 +48,7 @@ test("should show error when OTP format is invalid", async ({ page }) => {
 
   await expect(page.getByText('Verify Your Identity')).toBeVisible();
 
-  await page.getByRole("textbox").first().fill("afgh");
+  await codeotp.otp('dfga');
 
   await page.getByRole('button', {
     name: 'Verify OTP →'
@@ -57,11 +63,12 @@ test("should show error when OTP format is invalid", async ({ page }) => {
 
 test("should show error when OTP length is less than 4 digits", async ({ page }) => {
 
-  await page.goto("https://dmoneyportal.roadtocareer.net/login");
+ const codeotp = new otp(page);
   await expect(page.getByText('Welcome Back')).toBeVisible();
 
-  await page.getByRole("textbox").first().fill("freetestemail77@gmail.com");
-  await page.getByRole("textbox").nth(1).fill("testmail123");
+  await loginpage.goto();
+  await loginpage.login('freetestemail77@gmail.com','testmail123');
+
 
   await page.getByRole('button', {
     name: 'Login →'
@@ -69,7 +76,7 @@ test("should show error when OTP length is less than 4 digits", async ({ page })
 
   await expect(page.getByText('Verify Your Identity')).toBeVisible();
 
-  await page.getByRole("textbox").first().fill("425");
+  await codeotp.otp('524');
 
   await page.getByRole('button', {
     name: 'Verify OTP →'
@@ -84,15 +91,17 @@ test("should show error when OTP length is less than 4 digits", async ({ page })
 
 test("should show error when OTP is expired or reused", async ({ page }) => {
 
-  await page.goto("https://dmoneyportal.roadtocareer.net/login");
+  const codeotp = new otp(page);
   await expect(page.getByText('Welcome Back')).toBeVisible();
 
-  await page.getByRole("textbox").first().fill("freetestemail77@gmail.com");
-  await page.getByRole("textbox").nth(1).fill("testmail123");
+  await loginpage.goto();
+  await loginpage.login('freetestemail77@gmail.com','testmail123');
+
 
   await page.getByRole('button', {
     name: 'Login →'
   }).click();
+
 
   await expect(page.getByText('Verify Your Identity')).toBeVisible();
 

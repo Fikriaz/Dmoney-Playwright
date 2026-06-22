@@ -48,14 +48,11 @@ test.describe("Login - Negative Cases", () => {
 
   test("should show error when username is invalid", async ({ page }) => {
 
-    await page.goto('https://dmoneyportal.roadtocareer.net/login');
+    const loginpage = new LoginPage(page);
+    await loginpage.goto();
 
-    await page.getByRole("textbox").first().fill('abcd21@gmail.com');
-    await page.getByRole("textbox").nth(1).fill('testmail123');
-
-    await page.getByRole('button', {
-      name: 'Login →'
-    }).click();
+    await expect(page.getByText('Welcome Back'));
+    await loginpage.login('freetest77@gmail.com','testmail123');
     
     await page.waitForTimeout(3000);
 
@@ -64,15 +61,10 @@ test.describe("Login - Negative Cases", () => {
 
 
   test("should show error when password is invalid", async ({ page }) => {
-
-    await page.goto('https://dmoneyportal.roadtocareer.net/login');
-
-    await page.getByRole("textbox").first().fill('freetestemail77@gmail.com');
-    await page.getByRole("textbox").nth(1).fill('ddfsfeaefae');
-
-    await page.getByRole('button', {
-      name: 'Login →'
-    }).click();
+    const loginpage = new LoginPage(page);
+    await loginpage.goto();
+    await expect(page.getByText('Welcome Back'));
+    await loginpage.login('freetestemail77@gmail.com','ddfsfeaefae');
 
     await page.waitForTimeout(3000);
 
@@ -84,14 +76,10 @@ test.describe("Login - Negative Cases", () => {
 
   test("should show error when username and password are invalid", async ({ page }) => {
 
-    await page.goto('https://dmoneyportal.roadtocareer.net/login');
-
-    await page.getByRole("textbox").first().fill('abcd21@gmail.com');
-    await page.getByRole("textbox").nth(1).fill('testmzdfdail123');
-
-    await page.getByRole('button', {
-      name: 'Login →'
-    }).click();
+    const loginpage = new LoginPage(page);
+    await loginpage.goto();
+    await expect(page.getByText('Welcome Back'));
+    await loginpage.login('abcd21@gmail.com','testmzdfdail123');
 
     await page.waitForTimeout(3000);
 
@@ -99,9 +87,10 @@ test.describe("Login - Negative Cases", () => {
   });
 
 
-  test("should show error when credentials are empty", async ({ page }) => {
+  test("should show error when fielad email and password  are empty", async ({ page }) => {
 
-    await page.goto('https://dmoneyportal.roadtocareer.net/login');
+    const loginpage = new LoginPage(page);
+    await loginpage.goto();
 
     await page.getByRole('button', {
       name: 'Login →'
@@ -117,13 +106,9 @@ test.describe("Login - Negative Cases", () => {
 
   test("should show error when username is empty", async ({ page }) => {
 
-    await page.goto('https://dmoneyportal.roadtocareer.net/login');
-
-    await page.getByRole("textbox").nth(1).fill('testmail123');
-
-    await page.getByRole('button', {
-      name: 'Login →'
-    }).click();
+    const loginpage = new LoginPage(page);
+    await loginpage.goto();
+    await loginpage.login('','testmail123');
 
     await page.waitForTimeout(3000);
 
@@ -135,13 +120,9 @@ test.describe("Login - Negative Cases", () => {
 
   test("should show error when password is empty", async ({ page }) => {
 
-    await page.goto('https://dmoneyportal.roadtocareer.net/login');
-
-    await page.getByRole("textbox").first().fill('freetestemail77@gmail.com');
-
-    await page.getByRole('button', {
-      name: 'Login →'
-    }).click();
+    const loginpage = new LoginPage(page);
+    await loginpage.goto();
+    await loginpage.login('freetestemail77@gmail.com','');
 
     await page.waitForTimeout(3000);
 

@@ -1,118 +1,109 @@
 import { test, expect } from "@playwright/test";
-
-test("should show error when account already exists", async ({ page }) => {
-
-  await page.goto('https://dmoneyportal.roadtocareer.net/register');
-
-  await expect(page.getByText('Create an Account')).toBeVisible();
-
-  await page.getByRole('textbox').first().fill('testcobaa');
-  await page.getByRole('textbox').nth(1).fill('freetestemail77@gmail.com');
-  await page.getByRole('textbox').nth(2).fill('cobadulu123');
-  await page.getByRole('textbox').nth(3).fill('08229944923');
-  await page.getByRole('textbox').nth(4).fill('aefaefef321212eds');
-
-  await page.getByRole('combobox').click();
-  await page.getByRole('option', { name: 'Customer' }).click();
-
-  await page.getByRole('button', { name: 'Create Account →' }).click();
-
-  await expect(
-    page.getByText('An account with this email already exists')
-  ).toBeVisible();
-});
+import { register } from "../../pages/register";
 
 
-test("should show error when required fields are empty", async ({ page }) => {
+test.describe("Register Negative Test", () => {
 
-  await page.goto('https://dmoneyportal.roadtocareer.net/register');
+  test("should show error when account already exists", async ({ page }) => {
+    const registerPage = new RegisterPage(page);
 
-  await expect(page.getByText('Create an Account')).toBeVisible();
+    await registerPage.goto();
 
-  await page.getByRole('textbox').nth(1).fill('freetestemail77@gmail.com');
-  await page.getByRole('textbox').nth(2).fill('cobadulu123');
-  await page.getByRole('textbox').nth(3).fill('08229944923');
-  await page.getByRole('textbox').nth(4).fill('aefaefef321212eds');
+    await registerPage.fillForm(
+      "testcobaa",
+      "your@email.com",
+      "password123",
+      "08229944923",
+      "123456789"
+    );
 
-  await page.getByRole('combobox').click();
-  await page.getByRole('option', { name: 'Customer' }).click();
+    await registerPage.selectRole("Customer");
+    await registerPage.submit();
 
-  await page.getByRole('button', { name: 'Create Account →' }).click();
+    await expect(
+      page.getByText("An account with this email already exists")
+    ).toBeVisible();
+  });
 
-  await page.waitForTimeout(3000);
+  test("should show error when required fields are empty", async ({ page }) => {
+    const registerPage = new RegisterPage(page);
 
-  await expect(
-    page.getByText('All fields are required.')
-  ).toBeVisible();
-});
+    await registerPage.goto();
 
+    await registerPage.emailInput.fill("freetestemail77@gmail.com");
+    await registerPage.passInput.fill("cobadulu123");
+    await registerPage.phoneInput.fill("08229944923");
+    await registerPage.nidInput.fill("aefaefef321212eds");
 
-test("should show error when phone number is less than 11 digits", async ({ page }) => {
+    await registerPage.selectRole("Customer");
+    await registerPage.submit();
 
-  await page.goto('https://dmoneyportal.roadtocareer.net/register');
+    await expect(
+      page.getByText("All fields are required.")
+    ).toBeVisible();
+  });
 
-  await expect(page.getByText('Create an Account')).toBeVisible();
+  test("should show error when phone number is less than 11 digits", async ({ page }) => {
+    const registerPage = new RegisterPage(page);
 
-  await page.getByRole('textbox').first().fill('testcobaa');
-  await page.getByRole('textbox').nth(1).fill('freetestemail77@gmail.com');
-  await page.getByRole('textbox').nth(2).fill('cobadulu123');
-  await page.getByRole('textbox').nth(3).fill('0994923');
-  await page.getByRole('textbox').nth(4).fill('aefaefef3212ds');
+    await registerPage.goto();
 
-  await page.getByRole('combobox').click();
-  await page.getByRole('option', { name: 'Customer' }).click();
+    await registerPage.fillForm(
+      "testcobaa",
+      "freetestemail77@gmail.com",
+      "cobadulu123",
+      "0994923",
+      "aefaefef3212ds"
+    );
 
-  await page.getByRole('button', { name: 'Create Account →' }).click();
+    await registerPage.selectRole("Customer");
+    await registerPage.submit();
 
-  await page.waitForTimeout(3000);
+    await expect(
+      page.getByText("Phone number must be exactly 11 digits.")
+    ).toBeVisible();
+  });
 
-  await expect(
-    page.getByText('Phone number must be exactly 11 digits.')
-  ).toBeVisible();
-});
+  test("should show error when NID is less than 7 characters", async ({ page }) => {
+    const registerPage = new RegisterPage(page);
 
+    await registerPage.goto();
 
-test("should show error when NID is less than 7 characters", async ({ page }) => {
+    await registerPage.fillForm(
+      "testcobaa",
+      "freetestemail77@gmail.com",
+      "cobadulu123",
+      "08229944923",
+      "212eds"
+    );
 
-  await page.goto('https://dmoneyportal.roadtocareer.net/register');
+    await registerPage.selectRole("Customer");
+    await registerPage.submit();
 
-  await expect(page.getByText('Create an Account')).toBeVisible();
+    await expect(
+      page.getByText('"nid" length must be at least 7 characters long')
+    ).toBeVisible();
+  });
 
-  await page.getByRole('textbox').first().fill('testcobaa');
-  await page.getByRole('textbox').nth(1).fill('freetestemail77@gmail.com');
-  await page.getByRole('textbox').nth(2).fill('cobadulu123');
-  await page.getByRole('textbox').nth(3).fill('08229944923');
-  await page.getByRole('textbox').nth(4).fill('212eds');
+  test("should show error when name is less than 3 characters", async ({ page }) => {
+    const registerPage = new RegisterPage(page);
 
-  await page.getByRole('combobox').click();
-  await page.getByRole('option', { name: 'Customer' }).click();
+    await registerPage.goto();
 
-  await page.getByRole('button', { name: 'Create Account →' }).click();
+    await registerPage.fillForm(
+      "a",
+      "freetestemail77@gmail.com",
+      "cobadulu123",
+      "08229944923",
+      "aefaefef321212eds"
+    );
 
-  await expect(
-    page.getByText('"nid" length must be at least 7 characters long')
-  ).toBeVisible();
-});
+    await registerPage.selectRole("Customer");
+    await registerPage.submit();
 
+    await expect(
+      page.getByText('"name" length must be at least 3 characters long')
+    ).toBeVisible();
+  });
 
-test("should show error when name is less than 3 characters", async ({ page }) => {
-
-  await page.goto('https://dmoneyportal.roadtocareer.net/register');
-
-  await expect(page.getByText('Create an Account')).toBeVisible();
-
-  await page.getByRole('textbox').first().fill('a');
-  await page.getByRole('textbox').nth(1).fill('freetestemail77@gmail.com');
-  await page.getByRole('textbox').nth(2).fill('cobadulu123');
-  await page.getByRole('textbox').nth(3).fill('08229944923');
-  await page.getByRole('textbox').nth(4).fill('aefaefef321212eds');
-
-  await page.getByRole('combobox').click();
-  await page.getByRole('option', { name: 'Customer' }).click();
-
-  await page.getByRole('button', { name: 'Create Account →' }).click();
-
-  await expect(
-    page.getByText('"name" length must be at least 3 characters long')
-  ).toBeVisible();
 });
