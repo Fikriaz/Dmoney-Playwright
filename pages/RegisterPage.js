@@ -1,4 +1,4 @@
-export class register {
+export class RegisterPage {
   constructor(page) {
     this.page = page;
     this.nameInput = page.getByPlaceholder('Enter your full name');
@@ -7,9 +7,7 @@ export class register {
     this.phoneInput = page.getByRole('textbox', {name : "Phone Number"});
     this.nidInput = page.getByRole('textbox', {name : "National ID (NID)"});
     this.roleDropdown = page.getByRole('combobox');
-
-
-    this.buttonlogin = page.getByRole('button', { name: 'Create Account →' });
+    this.buttonRegister = page.getByRole('button', { name: 'Create Account →' });
   }
 
   async goto() {
@@ -24,8 +22,7 @@ async register(name, email, password, phone, nid, role) {
     await this.nidInput.fill(nid);
 
     await this.roleDropdown.click();
-    await this.page.getByRole('option', { name: role }).click();
-
-    await this.createAccountButton.click();
+    await this.page.getByRole('option', { name: 'Customer' }).click();
+    await this.buttonRegister.click();
   }
 }
