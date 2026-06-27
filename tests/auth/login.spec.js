@@ -23,17 +23,14 @@ test.describe("Login - Positive Cases", () => {
     if (!otp) {
       throw new Error("OTP tidak ditemukan dari Gmail");
     }
-
     await page.getByRole("textbox", { 
       name: "Enter 4-Digit OTP" 
     }).fill(otp);
-
     await page.getByRole('button', {
       name: 'Verify OTP →'
     }).click();
 
     await page.waitForTimeout(5000);
-
     await expect(page).toHaveURL(
       'https://dmoneyportal.roadtocareer.net/profile'
     );

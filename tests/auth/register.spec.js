@@ -3,7 +3,6 @@ import { RegisterPage } from "../../pages/RegisterPage";
 
 
 test.describe("Register Negative Test", () => {
-
   test("should show error when account already exists", async ({ page }) => {
     const registerPage = new RegisterPage(page);
     await registerPage.goto();
@@ -14,7 +13,6 @@ test.describe("Register Negative Test", () => {
       "08229944923",
       "aefaefef321212eds"
     );
-
 
     await expect(
       page.getByText("An account with this email already exists")
@@ -79,6 +77,7 @@ test.describe("Register Negative Test", () => {
       "08229944923",
       "aefaefef321212eds"
     );
+
     await expect(
       page.getByText('"name" length must be at least 3 characters long')
     ).toBeVisible();

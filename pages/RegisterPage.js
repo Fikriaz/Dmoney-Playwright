@@ -13,7 +13,7 @@ export class RegisterPage {
   async goto() {
     await this.page.goto("https://dmoneyportal.roadtocareer.net/register");
   }
-
+  
 async register(name, email, password, phone, nid, role) {
     await this.nameInput.fill(name);
     await this.emailInput.fill(email);

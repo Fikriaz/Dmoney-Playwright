@@ -13,7 +13,6 @@ test("should show error when OTP is invalid", async ({ page }) => {
   await expect(page.getByText('Welcome Back')).toBeVisible();
 
   await loginpage.login('freetestemail77@gmail.com','testmail123');
-
   await expect(page.getByText('Verify Your Identity')).toBeVisible();
   await codeotp.Submitotp('5234');
 
@@ -22,26 +21,21 @@ test("should show error when OTP is invalid", async ({ page }) => {
   ).toBeVisible();
 
 });
-
-
 test("should show error when OTP format is invalid", async ({ page }) => {
 
   const loginpage = new LoginPage(page);
   const codeotp = new OtpPage(page);
   await loginpage.goto();
-    await expect(page.getByText('Welcome Back')).toBeVisible();
+  await expect(page.getByText('Welcome Back')).toBeVisible();
   await loginpage.login('freetestemail77@gmail.com','testmail123');
   await expect(page.getByText('Verify Your Identity')).toBeVisible();
 
   await codeotp.Submitotp('dfga');
-
   await expect(
     page.getByText('Please enter the 4-digit OTP.')
   ).toBeVisible();
 
 });
-
-
 test("should show error when OTP length is less than 4 digits", async ({ page }) => {
   const loginpage = new LoginPage(page);
   const codeotp = new OtpPage(page);
@@ -53,8 +47,6 @@ test("should show error when OTP length is less than 4 digits", async ({ page })
   await codeotp.Submitotp('534');
 
 });
-
-
 test("should show error when OTP is expired or reused", async ({ page }) => {
   const loginpage = new LoginPage(page);
   const codeotp = new OtpPage(page);
@@ -62,17 +54,15 @@ test("should show error when OTP is expired or reused", async ({ page }) => {
   await expect(page.getByText('Welcome Back')).toBeVisible();
   await loginpage.login('freetestemail77@gmail.com','testmail123');
   await expect(page.getByText('Verify Your Identity')).toBeVisible();
-  test.setTimeout(130000);
 
+  test.setTimeout(130000);
   const otp = await getOtp();
   console.log("OTP:", otp);
-
   if (!otp) {
     throw new Error("OTP tidak ditemukan dari Gmail");
   }
 
   await codeotp.Submitotp(otp);
-
   await expect(
     page.getByText('Invalid OTP. Please try again.')
   ).toBeVisible();

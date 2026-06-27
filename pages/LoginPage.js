@@ -10,7 +10,7 @@ export class LoginPage {
   async goto() {
     await this.page.goto("https://dmoneyportal.roadtocareer.net/login");
   }
-
+  
   async login(email, password) {
     await this.emailInput.fill(email);
     await this.passInput.fill(password);
